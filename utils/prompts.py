@@ -25,3 +25,17 @@ Your task:
 
 Medical Report:
 """
+
+
+DOCUMENT_QA_PROMPT = """
+Answer ONLY using the provided document content.
+
+Rules:
+
+1. Do not invent information.
+2. If the answer is not present, say:
+   'The uploaded document does not contain enough information.'
+3. Be concise and professional.
+
+Document Content:
+"""

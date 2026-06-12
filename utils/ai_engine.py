@@ -3,7 +3,8 @@ import google.generativeai as genai
 
 from utils.prompts import (
     SYSTEM_PROMPT,
-    REPORT_ANALYSIS_PROMPT
+    REPORT_ANALYSIS_PROMPT,
+    DOCUMENT_QA_PROMPT
 )
 
 genai.configure(
@@ -33,6 +34,21 @@ def analyze_medical_report(report_text):
     {REPORT_ANALYSIS_PROMPT}
 
     {report_text}
+    """
+
+    response = model.generate_content(prompt)
+
+    return response.text
+
+def answer_document_question(document_text, question):
+
+    prompt = f"""
+    {DOCUMENT_QA_PROMPT}
+
+    {document_text}
+
+    Question:
+    {question}
     """
 
     response = model.generate_content(prompt)

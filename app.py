@@ -13,22 +13,13 @@ st.title(
 col1, col2, col3 = st.columns(3)
 
 with col1:
-    st.metric(
-        "Modules",
-        "5"
-    )
+    st.metric("Modules", "6")
 
 with col2:
-    st.metric(
-        "AI Powered",
-        "Gemini"
-    )
+    st.metric("AI Model", "Gemini")
 
 with col3:
-    st.metric(
-        "Version",
-        "2.0"
-    )
+    st.metric("Version", "3.0")
 
 st.markdown("---")
 
@@ -46,6 +37,8 @@ st.markdown("""
 ✅ Medical Report Analysis
 
 ✅ Chat Export
+            
+✅ Medical Knowledge Base
 
 ---
 
