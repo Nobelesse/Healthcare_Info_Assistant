@@ -2,6 +2,7 @@ import streamlit as st
 
 from utils.ai_engine import get_ai_response
 from utils.emergency import check_emergency
+from utils.export_chat import create_chat_pdf
 
 st.title("🤖 Healthcare Chatbot")
 
@@ -58,3 +59,31 @@ Please seek immediate medical attention or contact emergency services.
                 "content": answer
             }
         )
+if st.session_state.messages:
+
+    txt_content = ""
+
+    for msg in st.session_state.messages:
+
+        txt_content += (
+            f"{msg['role'].upper()}: "
+            f"{msg['content']}\n\n"
+        )
+
+    st.download_button(
+        label="⬇ Download TXT",
+        data=txt_content,
+        file_name="chat_history.txt",
+        mime="text/plain"
+    )
+
+    pdf_file = create_chat_pdf(
+        st.session_state.messages
+    )
+
+    st.download_button(
+        label="⬇ Download PDF",
+        data=pdf_file,
+        file_name="chat_history.pdf",
+        mime="application/pdf"
+    )

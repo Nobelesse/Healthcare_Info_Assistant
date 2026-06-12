@@ -1,7 +1,10 @@
 import streamlit as st
 import google.generativeai as genai
 
-from utils.prompts import SYSTEM_PROMPT
+from utils.prompts import (
+    SYSTEM_PROMPT,
+    REPORT_ANALYSIS_PROMPT
+)
 
 genai.configure(
     api_key=st.secrets["GEMINI_API_KEY"]
@@ -18,6 +21,18 @@ def get_ai_response(user_query):
 
     User Question:
     {user_query}
+    """
+
+    response = model.generate_content(prompt)
+
+    return response.text
+
+def analyze_medical_report(report_text):
+
+    prompt = f"""
+    {REPORT_ANALYSIS_PROMPT}
+
+    {report_text}
     """
 
     response = model.generate_content(prompt)
