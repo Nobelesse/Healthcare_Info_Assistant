@@ -1,9 +1,22 @@
-import streamlit as st
+import sqlite3
 
 
 def save_query(query):
 
-    if "history" not in st.session_state:
-        st.session_state.history = []
+    conn = sqlite3.connect(
+        "healthcare.db"
+    )
 
-    st.session_state.history.append(query)
+    cursor = conn.cursor()
+
+    cursor.execute(
+        """
+        INSERT INTO history(query)
+        VALUES(?)
+        """,
+        (query,)
+    )
+
+    conn.commit()
+
+    conn.close()

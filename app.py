@@ -1,5 +1,11 @@
 import streamlit as st
 
+from utils.database import (
+    initialize_database
+)
+
+initialize_database()
+
 from utils.session_manager import (
     initialize_session
 )

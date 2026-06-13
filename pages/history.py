@@ -1,20 +1,34 @@
+import sqlite3
 import streamlit as st
 
 st.title("📜 Search History")
 
-history = st.session_state.get(
-    "history",
-    []
+conn = sqlite3.connect(
+    "healthcare.db"
 )
 
-if history:
+cursor = conn.cursor()
 
-    for item in reversed(history):
+cursor.execute("""
+SELECT query
+FROM history
+ORDER BY id DESC
+""")
 
-        st.write(f"• {item}")
+rows = cursor.fetchall()
+
+conn.close()
+
+if rows:
+
+    for row in rows:
+
+        st.write(
+            f"• {row[0]}"
+        )
 
 else:
 
     st.info(
-        "No search history available."
+        "No history found."
     )
