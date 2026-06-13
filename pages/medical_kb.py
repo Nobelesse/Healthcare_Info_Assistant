@@ -15,6 +15,10 @@ uploaded_files = st.file_uploader(
 
 if uploaded_files:
 
+    st.session_state.documents_uploaded += len(
+    uploaded_files
+    )
+
     full_text = ""
 
     for file in uploaded_files:

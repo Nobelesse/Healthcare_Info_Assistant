@@ -3,6 +3,7 @@ import streamlit as st
 from utils.ai_engine import get_ai_response
 from utils.emergency import check_emergency
 from utils.export_chat import create_chat_pdf
+from utils.history import save_query
 
 st.title("🤖 Healthcare Chatbot")
 
@@ -18,6 +19,10 @@ prompt = st.chat_input(
 )
 
 if prompt:
+
+    save_query(prompt)
+
+    st.session_state.questions_asked += 1
 
     st.session_state.messages.append(
         {

@@ -40,4 +40,6 @@ if uploaded_file:
                 report_text
             )
 
-        st.markdown(analysis)
+            st.session_state.reports_analyzed += 1
+
+            st.markdown(analysis)
