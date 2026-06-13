@@ -1,0 +1,217 @@
+/* ==========================
+   Global Styling
+========================== */
+
+.main {
+    padding-top: 1rem;
+}
+
+/* ==========================
+   Main Header
+========================== */
+
+.main-header {
+    font-size: 3rem;
+    font-weight: 800;
+    text-align: center;
+    color: #0F62FE;
+    margin-bottom: 10px;
+}
+
+.sub-header {
+    font-size: 1.2rem;
+    text-align: center;
+    color: #6B7280;
+    margin-bottom: 30px;
+}
+
+/* ==========================
+   Glass Cards
+========================== */
+
+.glass-card {
+    background: rgba(255,255,255,0.75);
+    backdrop-filter: blur(12px);
+
+    border-radius: 18px;
+
+    padding: 20px;
+
+    border: 1px solid rgba(255,255,255,0.2);
+
+    box-shadow:
+        0 8px 32px rgba(0,0,0,0.08);
+
+    margin-bottom: 20px;
+}
+
+/* ==========================
+   Feature Cards
+========================== */
+
+.feature-card {
+
+    background: white;
+
+    border-radius: 16px;
+
+    padding: 20px;
+
+    box-shadow:
+        0px 4px 15px rgba(0,0,0,0.08);
+
+    transition: all 0.3s ease;
+}
+
+.feature-card:hover {
+
+    transform: translateY(-4px);
+
+    box-shadow:
+        0px 10px 20px rgba(0,0,0,0.15);
+}
+
+/* ==========================
+   Metrics Styling
+========================== */
+
+[data-testid="metric-container"] {
+
+    background-color: white;
+
+    border: 1px solid #E5E7EB;
+
+    padding: 18px;
+
+    border-radius: 15px;
+
+    box-shadow:
+        0px 4px 10px rgba(0,0,0,0.05);
+}
+
+/* ==========================
+   Buttons
+========================== */
+
+.stButton > button {
+
+    width: 100%;
+
+    border-radius: 10px;
+
+    font-weight: 600;
+
+    border: none;
+
+    padding: 12px;
+
+    transition: 0.3s;
+}
+
+.stButton > button:hover {
+
+    transform: scale(1.02);
+}
+
+/* ==========================
+   Inputs
+========================== */
+
+.stTextInput input,
+.stTextArea textarea {
+
+    border-radius: 10px;
+}
+
+/* ==========================
+   Sidebar
+========================== */
+
+section[data-testid="stSidebar"] {
+
+    background-color: #F8FAFC;
+}
+
+section[data-testid="stSidebar"] h1 {
+
+    color: #0F62FE;
+}
+
+/* ==========================
+   Expander
+========================== */
+
+.streamlit-expanderHeader {
+
+    font-weight: 600;
+}
+
+/* ==========================
+   Tables
+========================== */
+
+[data-testid="stDataFrame"] {
+
+    border-radius: 12px;
+}
+
+/* ==========================
+   Footer
+========================== */
+
+.footer {
+
+    text-align: center;
+
+    color: #6B7280;
+
+    margin-top: 50px;
+
+    padding: 20px;
+}
+
+/* ==========================
+   Section Titles
+========================== */
+
+.section-title {
+
+    font-size: 1.7rem;
+
+    font-weight: 700;
+
+    color: #0F62FE;
+
+    margin-bottom: 15px;
+}
+
+/* ==========================
+   Dashboard Cards
+========================== */
+
+.dashboard-card {
+
+    background: linear-gradient(
+        135deg,
+        #0F62FE,
+        #4589FF
+    );
+
+    color: white;
+
+    padding: 25px;
+
+    border-radius: 18px;
+
+    box-shadow:
+        0 10px 25px rgba(15,98,254,0.3);
+}
+
+/* ==========================
+   Success Boxes
+========================== */
+
+.element-container .stAlert {
+
+    border-radius: 12px;
+}

@@ -1,6 +1,27 @@
 import streamlit as st
+import plotly.express as px
 
 st.title("📊 Analytics Dashboard")
+
+questions = st.session_state.get(
+    "questions_asked",
+    0
+)
+
+reports = st.session_state.get(
+    "reports_analyzed",
+    0
+)
+
+documents = st.session_state.get(
+    "documents_uploaded",
+    0
+)
+
+searches = st.session_state.get(
+    "kb_searches",
+    0
+)
 
 col1, col2 = st.columns(2)
 
@@ -8,40 +29,49 @@ with col1:
 
     st.metric(
         "Questions Asked",
-        st.session_state.get(
-            "questions_asked",
-            0
-        )
+        questions
     )
 
     st.metric(
         "Reports Analyzed",
-        st.session_state.get(
-            "reports_analyzed",
-            0
-        )
+        reports
     )
 
 with col2:
 
     st.metric(
         "Documents Uploaded",
-        st.session_state.get(
-            "documents_uploaded",
-            0
-        )
+        documents
     )
 
     st.metric(
-        "Knowledge Base Searches",
-        st.session_state.get(
-            "kb_searches",
-            0
-        )
+        "KB Searches",
+        searches
     )
 
-st.markdown("---")
+chart_data = {
+    "Category": [
+        "Questions",
+        "Reports",
+        "Documents",
+        "KB Searches"
+    ],
+    "Count": [
+        questions,
+        reports,
+        documents,
+        searches
+    ]
+}
 
-st.info(
-    "Analytics are stored for the current session."
+fig = px.bar(
+    chart_data,
+    x="Category",
+    y="Count",
+    title="Usage Analytics"
+)
+
+st.plotly_chart(
+    fig,
+    use_container_width=True
 )

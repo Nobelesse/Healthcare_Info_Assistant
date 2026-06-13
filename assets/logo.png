@@ -1,0 +1,4 @@
+st.image(
+    "assets/logo.png",
+    width=150
+)

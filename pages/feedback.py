@@ -4,14 +4,14 @@ import streamlit as st
 st.title("⭐ Feedback")
 
 rating = st.slider(
-    "Rate the Application",
+    "Rate Application",
     1,
     5,
     5
 )
 
 feedback = st.text_area(
-    "Share your feedback"
+    "Your Feedback"
 )
 
 if st.button(
@@ -43,5 +43,5 @@ if st.button(
     conn.close()
 
     st.success(
-        "Feedback saved successfully."
+        "Feedback submitted successfully."
     )

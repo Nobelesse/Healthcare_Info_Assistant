@@ -1,5 +1,6 @@
 import sqlite3
 import streamlit as st
+import pandas as pd
 
 st.title(
     "📋 Admin Dashboard"
@@ -9,31 +10,31 @@ conn = sqlite3.connect(
     "healthcare.db"
 )
 
-cursor = conn.cursor()
-
-cursor.execute(
-    """
-    SELECT *
-    FROM feedback
-    """
+feedback_df = pd.read_sql_query(
+    "SELECT * FROM feedback",
+    conn
 )
-
-feedback_rows = cursor.fetchall()
 
 conn.close()
 
 st.subheader(
-    "User Feedback"
+    "Feedback Records"
 )
 
-for row in feedback_rows:
+st.dataframe(
+    feedback_df,
+    use_container_width=True
+)
 
-    st.write(
-        f"⭐ {row[1]}/5"
+if not feedback_df.empty:
+
+    csv = feedback_df.to_csv(
+        index=False
     )
 
-    st.write(
-        row[2]
+    st.download_button(
+        "⬇ Download Feedback CSV",
+        csv,
+        "feedback.csv",
+        "text/csv"
     )
-
-    st.markdown("---")

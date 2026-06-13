@@ -1,24 +1,40 @@
 import streamlit as st
 
-from utils.database import (
-    initialize_database
-)
+from utils.session_manager import initialize_session
+from utils.database import initialize_database
+from utils.ui import load_css
 
-initialize_database()
-
-from utils.session_manager import (
-    initialize_session
-)
-
-initialize_session()
+# ------------------------------------
+# Page Configuration
+# ------------------------------------
 
 st.set_page_config(
-    page_title="Healthcare Info Assistant",
+    page_title="Healthcare Information Assistant",
     page_icon="🏥",
     layout="wide"
 )
 
+# ------------------------------------
+# Initialization
+# ------------------------------------
+
+initialize_session()
+initialize_database()
+load_css()
+
+# ------------------------------------
+# Sidebar
+# ------------------------------------
+
 with st.sidebar:
+
+    try:
+        st.image(
+            "assets/logo.png",
+            width=150
+        )
+    except:
+        pass
 
     st.title(
         "🏥 Healthcare Assistant"
@@ -27,61 +43,174 @@ with st.sidebar:
     st.markdown("---")
 
     st.info(
-        "AI-powered Healthcare Information Platform"
+        "AI-Powered Healthcare Information Platform"
     )
 
     st.markdown(
-        "Version 4.0"
+        "Version 6.0"
     )
 
-st.title(
-    "🏥 Healthcare Info Assistant"
+# ------------------------------------
+# Header Section
+# ------------------------------------
+
+st.markdown(
+    """
+    <div class='main-header'>
+        🏥 Healthcare Information Assistant
+    </div>
+    """,
+    unsafe_allow_html=True
 )
 
-col1, col2 = st.columns(2)
+st.markdown(
+    """
+    <div class='sub-header'>
+        AI-Powered Healthcare Education Platform
+    </div>
+    """,
+    unsafe_allow_html=True
+)
+
+st.markdown("<br>", unsafe_allow_html=True)
+
+# ------------------------------------
+# Analytics Cards
+# ------------------------------------
+
+col1, col2, col3, col4 = st.columns(4)
 
 with col1:
 
     st.metric(
         "Questions Asked",
-        st.session_state.questions_asked
+        st.session_state.get(
+            "questions_asked",
+            0
+        )
     )
 
 with col2:
 
     st.metric(
         "Reports Analyzed",
-        st.session_state.reports_analyzed
+        st.session_state.get(
+            "reports_analyzed",
+            0
+        )
+    )
+
+with col3:
+
+    st.metric(
+        "Documents Uploaded",
+        st.session_state.get(
+            "documents_uploaded",
+            0
+        )
+    )
+
+with col4:
+
+    st.metric(
+        "KB Searches",
+        st.session_state.get(
+            "kb_searches",
+            0
+        )
     )
 
 st.markdown("---")
 
-st.markdown("""
-### Features
+# ------------------------------------
+# Feature Overview
+# ------------------------------------
 
-✅ Healthcare Chatbot
+st.subheader("🚀 Platform Features")
 
-✅ Symptom Checker
+feature_col1, feature_col2 = st.columns(2)
 
-✅ Disease Information
+with feature_col1:
 
-✅ Health Tips
+    st.success("AI Healthcare Chatbot")
 
-✅ PDF Medical Report Analysis
+    st.success("Symptom Checker")
 
-✅ Knowledge Base (RAG)
+    st.success("Disease Information")
 
-✅ Analytics Dashboard
+    st.success("Health Tips Generator")
 
-✅ Search History
+with feature_col2:
 
-✅ Feedback System
+    st.success("PDF Report Analysis")
 
----
+    st.success("Medical Knowledge Base (RAG)")
 
-### Disclaimer
+    st.success("Analytics Dashboard")
 
-This application provides educational healthcare information only.
+    st.success("Feedback System")
 
-It does not provide medical diagnosis or treatment.
-""")
+st.markdown("---")
+
+# ------------------------------------
+# About Project
+# ------------------------------------
+
+st.subheader("📚 About This Project")
+
+st.write(
+    """
+    Healthcare Information Assistant is an AI-powered platform
+    designed to provide educational healthcare information,
+    document analysis, symptom guidance, and knowledge retrieval
+    using Retrieval-Augmented Generation (RAG).
+
+    Technologies Used:
+
+    • Python 3.12
+
+    • Streamlit
+
+    • Google Gemini API
+
+    • SQLite Database
+
+    • Scikit-Learn
+
+    • Plotly Analytics
+
+    • PDF Processing
+    """
+)
+
+st.markdown("---")
+
+# ------------------------------------
+# Disclaimer
+# ------------------------------------
+
+st.warning(
+    """
+    Medical Disclaimer:
+
+    This application is intended for educational and informational
+    purposes only. It does not provide medical diagnosis,
+    treatment recommendations, or emergency healthcare services.
+
+    Always consult a qualified healthcare professional for
+    medical concerns.
+    """
+)
+
+# ------------------------------------
+# Footer
+# ------------------------------------
+
+st.markdown(
+    """
+    <div class='footer'>
+        Healthcare Information Assistant © 2026
+    </div>
+    """,
+    unsafe_allow_html=True
+)

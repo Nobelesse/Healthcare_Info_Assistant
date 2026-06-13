@@ -1,21 +1,30 @@
 import streamlit as st
 
-st.title("ℹ️ About")
+st.title(
+    "ℹ About"
+)
 
-st.markdown("""
-## Healthcare Info Assistant
+st.markdown(
+    """
+### Healthcare Information Assistant
 
-Version: 1.0
+Features:
 
-### Technologies Used
+- AI Healthcare Chatbot
+- Symptom Checker
+- Disease Information
+- Health Tips
+- PDF Report Analysis
+- Medical Knowledge Base (RAG)
+- Analytics Dashboard
 
-- Python 3.12
+Technology Stack:
+
+- Python
 - Streamlit
-- Google Gemini API
-
-### Disclaimer
-
-This application is intended for educational and informational purposes only.
-
-Always consult qualified healthcare professionals for medical advice.
-""")
+- Gemini API
+- SQLite
+- Scikit-Learn
+- Plotly
+"""
+)
