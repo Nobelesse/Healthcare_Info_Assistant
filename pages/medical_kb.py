@@ -1,49 +1,67 @@
 import streamlit as st
 
 from utils.pdf_reader import extract_pdf_text
-from utils.ai_engine import answer_document_question
+from utils.chunker import chunk_text
+from utils.vector_store import SimpleVectorStore
+from utils.ai_engine import answer_rag_question
 
-st.title("📚 Medical Knowledge Base")
+st.title("📚 Medical Knowledge Base (RAG)")
 
 uploaded_files = st.file_uploader(
-    "Upload Medical PDFs",
+    "Upload PDFs",
     type=["pdf"],
     accept_multiple_files=True
 )
 
 if uploaded_files:
 
-    combined_text = ""
+    full_text = ""
 
     for file in uploaded_files:
 
-        text = extract_pdf_text(file)
+        full_text += extract_pdf_text(file)
 
-        combined_text += (
-            f"\n\n--- DOCUMENT: {file.name} ---\n\n"
-        )
+    chunks = chunk_text(full_text)
 
-        combined_text += text
+    store = SimpleVectorStore()
 
-    st.session_state["kb_text"] = combined_text
+    store.build(chunks)
+
+    st.session_state["vector_store"] = store
 
     st.success(
-        f"{len(uploaded_files)} document(s) loaded."
+        f"Indexed {len(chunks)} chunks."
     )
 
-if "kb_text" in st.session_state:
+if "vector_store" in st.session_state:
 
     question = st.text_input(
-        "Ask a question about uploaded documents"
+        "Ask a question"
     )
 
-    if st.button("Search Knowledge Base"):
+    if st.button("Search"):
 
-        with st.spinner("Analyzing documents..."):
+        store = st.session_state[
+            "vector_store"
+        ]
 
-            answer = answer_document_question(
-                st.session_state["kb_text"],
-                question
-            )
+        retrieved_chunks = store.search(
+            question,
+            top_k=3
+        )
+
+        context = "\n\n".join(
+            retrieved_chunks
+        )
+
+        answer = answer_rag_question(
+            context,
+            question
+        )
 
         st.markdown(answer)
+
+        with st.expander(
+            "Retrieved Context"
+        ):
+            st.write(context)

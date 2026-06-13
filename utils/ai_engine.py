@@ -54,3 +54,24 @@ def answer_document_question(document_text, question):
     response = model.generate_content(prompt)
 
     return response.text
+
+def answer_rag_question(context, question):
+
+    prompt = f"""
+    Use ONLY the provided context.
+
+    Context:
+    {context}
+
+    Question:
+    {question}
+
+    If the answer is not found,
+    say so clearly.
+    """
+
+    response = model.generate_content(
+        prompt
+    )
+
+    return response.text
