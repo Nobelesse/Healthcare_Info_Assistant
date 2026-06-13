@@ -4,6 +4,11 @@ from utils.ai_engine import get_ai_response
 from utils.emergency import check_emergency
 from utils.export_chat import create_chat_pdf
 from utils.history import save_query
+from streamlit_mic_recorder import mic_recorder
+
+from utils.speech_to_text import (
+    transcribe_audio
+)
 
 st.title("🤖 Healthcare Chatbot")
 
@@ -14,9 +19,42 @@ for msg in st.session_state.messages:
     with st.chat_message(msg["role"]):
         st.markdown(msg["content"])
 
-prompt = st.chat_input(
-    "Ask your healthcare question..."
+st.subheader("🎤 Voice Input")
+
+audio = mic_recorder(
+    start_prompt="🎤 Start Recording",
+    stop_prompt="⏹ Stop Recording",
+    just_once=True,
+    use_container_width=True
 )
+
+voice_text = ""
+
+if audio:
+
+    try:
+
+        voice_text = transcribe_audio(
+            audio["bytes"]
+        )
+
+        st.success(
+            f"Recognized: {voice_text}"
+        )
+
+    except Exception as e:
+
+        st.error(str(e))
+
+typed_prompt = st.chat_input(
+    "Ask a healthcare question..."
+)
+
+prompt = typed_prompt
+
+if voice_text:
+
+    prompt = voice_text
 
 if prompt:
 
