@@ -45,23 +45,38 @@ if "vector_store" in st.session_state:
             "vector_store"
         ]
 
-        retrieved_chunks = store.search(
-            question,
-            top_k=3
+        retrieved = store.search(
+        question,
+        top_k=3
         )
 
-        context = "\n\n".join(
-            retrieved_chunks
-        )
+    context = "\n\n".join(
+        [
+            item["chunk"]
+            for item in retrieved
+        ]
+    )
 
-        answer = answer_rag_question(
-            context,
-            question
-        )
+    answer = answer_rag_question(
+        context,
+        question
+    )
 
-        st.markdown(answer)
+    st.markdown(answer)
+
+    st.subheader(
+        "Retrieved Sources"
+    )
+
+    for i, item in enumerate(
+        retrieved,
+        start=1
+    ):
 
         with st.expander(
-            "Retrieved Context"
+            f"Chunk {i} | Score: {item['score']:.3f}"
         ):
-            st.write(context)
+
+            st.write(
+                item["chunk"]
+            )

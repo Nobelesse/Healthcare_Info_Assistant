@@ -1,4 +1,8 @@
-def chunk_text(text, chunk_size=1000):
+def chunk_text(
+    text,
+    chunk_size=1000,
+    overlap=200
+):
 
     chunks = []
 
@@ -8,8 +12,12 @@ def chunk_text(text, chunk_size=1000):
 
         end = start + chunk_size
 
-        chunks.append(text[start:end])
+        chunks.append(
+            text[start:end]
+        )
 
-        start = end
+        start += (
+            chunk_size - overlap
+        )
 
     return chunks

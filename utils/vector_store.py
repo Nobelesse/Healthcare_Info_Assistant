@@ -1,5 +1,10 @@
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.metrics.pairwise import cosine_similarity
+from sklearn.feature_extraction.text import (
+    TfidfVectorizer
+)
+
+from sklearn.metrics.pairwise import (
+    cosine_similarity
+)
 
 
 class SimpleVectorStore:
@@ -16,29 +21,46 @@ class SimpleVectorStore:
 
         self.chunks = chunks
 
-        self.vectors = self.vectorizer.fit_transform(
-            chunks
+        self.vectors = (
+            self.vectorizer.fit_transform(
+                chunks
+            )
         )
 
-    def search(self, query, top_k=3):
+    def search(
+        self,
+        query,
+        top_k=3
+    ):
 
-        query_vector = self.vectorizer.transform(
-            [query]
+        query_vector = (
+            self.vectorizer.transform(
+                [query]
+            )
         )
 
-        similarities = cosine_similarity(
-            query_vector,
-            self.vectors
-        )[0]
+        similarities = (
+            cosine_similarity(
+                query_vector,
+                self.vectors
+            )[0]
+        )
 
-        ranked = similarities.argsort()[::-1]
+        ranked = (
+            similarities.argsort()[::-1]
+        )
 
         results = []
 
         for idx in ranked[:top_k]:
 
             results.append(
-                self.chunks[idx]
+                {
+                    "chunk": self.chunks[idx],
+                    "score": float(
+                        similarities[idx]
+                    )
+                }
             )
 
         return results
