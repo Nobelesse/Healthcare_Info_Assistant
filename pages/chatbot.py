@@ -6,8 +6,8 @@ from utils.export_chat import create_chat_pdf
 from utils.history import save_query
 from streamlit_mic_recorder import mic_recorder
 
-from utils.speech_to_text import (
-    transcribe_audio
+from utils.speech_handler import (
+    save_audio
 )
 
 defaults = {
@@ -30,6 +30,10 @@ for msg in st.session_state.messages:
     with st.chat_message(msg["role"]):
         st.markdown(msg["content"])
 
+voice_text = ""
+
+st.markdown("---")
+
 st.subheader("🎤 Voice Input")
 
 audio = mic_recorder(
@@ -39,23 +43,19 @@ audio = mic_recorder(
     use_container_width=True
 )
 
-voice_text = ""
-
 if audio:
 
-    try:
+    audio_path = save_audio(
+        audio["bytes"]
+    )
 
-        voice_text = transcribe_audio(
-            audio["bytes"]
-        )
+    st.success(
+        "Voice recording captured successfully."
+    )
 
-        st.success(
-            f"Recognized: {voice_text}"
-        )
-
-    except Exception as e:
-
-        st.error(str(e))
+    st.audio(
+        audio["bytes"]
+    )
 
 typed_prompt = st.chat_input(
     "Ask a healthcare question..."

@@ -134,6 +134,8 @@ with feature_col1:
 
     st.success("AI Healthcare Chatbot")
 
+    st.success("🎤 Voice Input Support")
+
     st.success("Symptom Checker")
 
     st.success("Disease Information")
