@@ -4,33 +4,50 @@ from utils.ai_engine import get_ai_response
 from utils.emergency import check_emergency
 from utils.export_chat import create_chat_pdf
 from utils.history import save_query
+
 from streamlit_mic_recorder import mic_recorder
 
-from utils.speech_handler import (
-    save_audio
-)
+from utils.speech_handler import save_audio
+
+
+# --------------------------------------------------
+# Session State Initialization
+# --------------------------------------------------
 
 defaults = {
     "questions_asked": 0,
     "chat_history": [],
-    "messages": [],
-    "user_input": "",
+    "messages": []
 }
 
 for key, value in defaults.items():
+
     if key not in st.session_state:
+
         st.session_state[key] = value
+
+
+# --------------------------------------------------
+# Page Title
+# --------------------------------------------------
 
 st.title("🤖 Healthcare Chatbot")
 
-if "messages" not in st.session_state:
-    st.session_state.messages = []
+
+# --------------------------------------------------
+# Display Previous Messages
+# --------------------------------------------------
 
 for msg in st.session_state.messages:
+
     with st.chat_message(msg["role"]):
+
         st.markdown(msg["content"])
 
-voice_text = ""
+
+# --------------------------------------------------
+# Voice Input Section
+# --------------------------------------------------
 
 st.markdown("---")
 
@@ -45,27 +62,43 @@ audio = mic_recorder(
 
 if audio:
 
-    audio_path = save_audio(
-        audio["bytes"]
-    )
+    try:
 
-    st.success(
-        "Voice recording captured successfully."
-    )
+        audio_path = save_audio(
+            audio["bytes"]
+        )
 
-    st.audio(
-        audio["bytes"]
-    )
+        st.success(
+            "Voice recording captured successfully."
+        )
 
-typed_prompt = st.chat_input(
+        st.audio(
+            audio["bytes"]
+        )
+
+        st.info(
+            "Phase 7A currently records audio only. Speech-to-text will be added in Phase 7B."
+        )
+
+    except Exception as e:
+
+        st.error(
+            f"Audio Error: {str(e)}"
+        )
+
+
+# --------------------------------------------------
+# Chat Input
+# --------------------------------------------------
+
+prompt = st.chat_input(
     "Ask a healthcare question..."
 )
 
-prompt = typed_prompt
 
-if voice_text:
-
-    prompt = voice_text
+# --------------------------------------------------
+# Process User Message
+# --------------------------------------------------
 
 if prompt:
 
@@ -81,9 +114,13 @@ if prompt:
     )
 
     with st.chat_message("user"):
+
         st.markdown(prompt)
 
+    # Emergency Detection
+
     if check_emergency(prompt):
+
         emergency_msg = """
 ⚠️ Potential emergency detected.
 
@@ -91,6 +128,7 @@ Please seek immediate medical attention or contact emergency services.
 """
 
         with st.chat_message("assistant"):
+
             st.markdown(emergency_msg)
 
         st.session_state.messages.append(
@@ -105,6 +143,7 @@ Please seek immediate medical attention or contact emergency services.
         answer = get_ai_response(prompt)
 
         with st.chat_message("assistant"):
+
             st.markdown(answer)
 
         st.session_state.messages.append(
@@ -113,6 +152,12 @@ Please seek immediate medical attention or contact emergency services.
                 "content": answer
             }
         )
+
+
+# --------------------------------------------------
+# Export Chat
+# --------------------------------------------------
+
 if st.session_state.messages:
 
     txt_content = ""
