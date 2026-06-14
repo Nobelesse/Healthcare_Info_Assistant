@@ -129,7 +129,7 @@
 
 section[data-testid="stSidebar"] {
 
-    background-color: #747272;
+    background-color: #F8FAFC;
 }
 
 section[data-testid="stSidebar"] h1 {
@@ -197,7 +197,7 @@ section[data-testid="stSidebar"] h1 {
         #4589FF
     );
 
-    color: rgb(0, 0, 0);
+    color: white;
 
     padding: 25px;
 
