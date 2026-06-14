@@ -10,4 +10,4 @@ scikit-learn==1.7.0
 plotly==6.2.0
 streamlit-mic-recorder==0.0.8
 gtts==2.5.4
-openai==1.99.1
+faster-whisper==1.1.1
