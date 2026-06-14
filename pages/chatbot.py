@@ -10,6 +10,17 @@ from utils.speech_to_text import (
     transcribe_audio
 )
 
+defaults = {
+    "questions_asked": 0,
+    "chat_history": [],
+    "messages": [],
+    "user_input": "",
+}
+
+for key, value in defaults.items():
+    if key not in st.session_state:
+        st.session_state[key] = value
+
 st.title("🤖 Healthcare Chatbot")
 
 if "messages" not in st.session_state:
