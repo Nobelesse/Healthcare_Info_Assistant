@@ -7,8 +7,11 @@ from utils.history import save_query
 
 from streamlit_mic_recorder import mic_recorder
 
-from utils.speech_handler import save_audio
-
+from utils.speech_handler import (
+    save_audio,
+    speech_to_text,
+    text_to_speech
+)
 
 # --------------------------------------------------
 # Session State Initialization
@@ -46,16 +49,18 @@ for msg in st.session_state.messages:
 
 
 # --------------------------------------------------
-# Voice Input Section
+# Voice Assistant
 # --------------------------------------------------
+
+voice_text = ""
 
 st.markdown("---")
 
-st.subheader("🎤 Voice Input")
+st.subheader("🎤 Voice Assistant")
 
 audio = mic_recorder(
-    start_prompt="🎤 Start Recording",
-    stop_prompt="⏹ Stop Recording",
+    start_prompt="🎤 Speak",
+    stop_prompt="⏹ Stop",
     just_once=True,
     use_container_width=True
 )
@@ -68,22 +73,26 @@ if audio:
             audio["bytes"]
         )
 
-        st.success(
-            "Voice recording captured successfully."
-        )
+        with st.spinner(
+            "Converting speech to text..."
+        ):
 
-        st.audio(
-            audio["bytes"]
+            voice_text = speech_to_text(
+                audio_path
+            )
+
+        st.success(
+            "Speech recognized successfully."
         )
 
         st.info(
-            "Phase 7A currently records audio only. Speech-to-text will be added in Phase 7B."
+            f"📝 {voice_text}"
         )
 
     except Exception as e:
 
         st.error(
-            f"Audio Error: {str(e)}"
+            f"Voice Error: {str(e)}"
         )
 
 
@@ -91,9 +100,19 @@ if audio:
 # Chat Input
 # --------------------------------------------------
 
-prompt = st.chat_input(
+typed_prompt = st.chat_input(
     "Ask a healthcare question..."
 )
+
+prompt = None
+
+if voice_text:
+
+    prompt = voice_text
+
+elif typed_prompt:
+
+    prompt = typed_prompt
 
 
 # --------------------------------------------------
@@ -117,7 +136,9 @@ if prompt:
 
         st.markdown(prompt)
 
+    # --------------------------------------------------
     # Emergency Detection
+    # --------------------------------------------------
 
     if check_emergency(prompt):
 
@@ -131,6 +152,15 @@ Please seek immediate medical attention or contact emergency services.
 
             st.markdown(emergency_msg)
 
+        emergency_audio = text_to_speech(
+            "Potential emergency detected. Please seek immediate medical attention."
+        )
+
+        st.audio(
+            emergency_audio,
+            format="audio/mp3"
+        )
+
         st.session_state.messages.append(
             {
                 "role": "assistant",
@@ -140,11 +170,34 @@ Please seek immediate medical attention or contact emergency services.
 
     else:
 
-        answer = get_ai_response(prompt)
+        with st.spinner(
+            "Generating response..."
+        ):
 
-        with st.chat_message("assistant"):
+            answer = get_ai_response(
+                prompt
+            )
 
-            st.markdown(answer)
+        with st.spinner(
+            "Generating voice response..."
+        ):
+
+            audio_reply = text_to_speech(
+                answer
+            )
+
+        with st.chat_message(
+            "assistant"
+        ):
+
+            st.markdown(
+                answer
+            )
+
+            st.audio(
+                audio_reply,
+                format="audio/mp3"
+            )
 
         st.session_state.messages.append(
             {
@@ -160,6 +213,8 @@ Please seek immediate medical attention or contact emergency services.
 
 if st.session_state.messages:
 
+    st.markdown("---")
+
     txt_content = ""
 
     for msg in st.session_state.messages:
@@ -169,20 +224,26 @@ if st.session_state.messages:
             f"{msg['content']}\n\n"
         )
 
-    st.download_button(
-        label="⬇ Download TXT",
-        data=txt_content,
-        file_name="chat_history.txt",
-        mime="text/plain"
-    )
+    col1, col2 = st.columns(2)
 
-    pdf_file = create_chat_pdf(
-        st.session_state.messages
-    )
+    with col1:
 
-    st.download_button(
-        label="⬇ Download PDF",
-        data=pdf_file,
-        file_name="chat_history.pdf",
-        mime="application/pdf"
-    )
+        st.download_button(
+            label="⬇ Download TXT",
+            data=txt_content,
+            file_name="chat_history.txt",
+            mime="text/plain"
+        )
+
+    with col2:
+
+        pdf_file = create_chat_pdf(
+            st.session_state.messages
+        )
+
+        st.download_button(
+            label="⬇ Download PDF",
+            data=pdf_file,
+            file_name="chat_history.pdf",
+            mime="application/pdf"
+        )
